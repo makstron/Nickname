@@ -8,8 +8,11 @@ import com.klim.architecture.domain.models.UserName
 import com.klim.architecture.domain.useCases.UsernameUseCase
 import com.klim.architecture.ui.entities.UserNameEntity
 import com.klim.architecture.ui.entities.helpers.UserNameH
+import javax.inject.Inject
 
-class GeneratorViewModel(val useCase: UsernameUseCase) : ViewModel() {
+class GeneratorViewModel
+@Inject
+constructor(val useCase: UsernameUseCase) : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is home Fragment"

@@ -21,14 +21,14 @@ import com.klim.architecture.data.repositories.userName.dataSources.LocalDataSou
 import com.klim.architecture.databinding.FragmentSavedBinding
 import com.klim.architecture.domain.useCases.UsernameUseCase
 
-class DashboardFragment : Fragment() {
+class SavedFragment : Fragment() {
 
     private lateinit var viewModel: SavedViewModel
     private lateinit var binding: FragmentSavedBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewModel = ViewModelProviders.of(this, MyViewModelFactory(UsernameUseCase(UserNameRepository(LocalDataSource((activity?.application as App).db), UserNameUserNameEntityMapper()))))
-            .get(SavedViewModel::class.java)
+//        viewModel = ViewModelProviders.of(this, MyViewModelFactory(UsernameUseCase(UserNameRepository(LocalDataSource((activity?.application as App).db), UserNameUserNameEntityMapper()))))
+//            .get(SavedViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_saved, container, false)
         binding.vm = viewModel
 

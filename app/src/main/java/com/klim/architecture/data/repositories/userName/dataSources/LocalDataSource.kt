@@ -7,8 +7,12 @@ import com.klim.architecture.data.dto.UserNameDTO
 import com.klim.architecture.data.repositories.userName.UserNameDataSourceI
 import com.klim.architecture.utils.UID
 import java.lang.Exception
+import javax.inject.Inject
 
-class LocalDataSource(val db: Db) : UserNameDataSourceI {
+
+class LocalDataSource
+@Inject
+constructor(val db: Db) : UserNameDataSourceI {
 
     override fun save(userName: UserNameDTO) {
         val sqlInsertPromo = "INSERT OR REPLACE INTO UserNames (id, userName, saveTime) " +

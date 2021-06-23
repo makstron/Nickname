@@ -19,16 +19,23 @@ import com.klim.architecture.data.mappers.UserNameUserNameEntityMapper
 import com.klim.architecture.data.repositories.userName.UserNameRepository
 import com.klim.architecture.data.repositories.userName.dataSources.LocalDataSource
 import com.klim.architecture.databinding.FragmentGeneratorBinding
+import com.klim.architecture.di.generator.GeneratorModule
 import com.klim.architecture.domain.useCases.UsernameUseCase
+import javax.inject.Inject
 
 
-class HomeFragment : Fragment() {
+class GeneratorFragment : Fragment() {
 
-    private lateinit var viewModel: GeneratorViewModel
     private lateinit var binding: FragmentGeneratorBinding
+    private lateinit var viewModel: GeneratorViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewModel = ViewModelProviders.of(this, MyViewModelFactory(UsernameUseCase(UserNameRepository(LocalDataSource((activity?.application as App).db), UserNameUserNameEntityMapper())))).get(GeneratorViewModel::class.java)
+        (activity?.application as App).appComponent.getGeneratorComponent(GeneratorModule()).inject(this)
+
+//        viewModel = ViewModelProviders.of(this, MyViewModelFactory(UsernameUseCase(UserNameRepository(LocalDataSource((activity?.application as App).db), UserNameUserNameEntityMapper())))).get(GeneratorViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(GeneratorViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_generator, container, false)
         binding.vm = viewModel
 

@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFF"
-        tools:context=".ui.generator.HomeFragment">
+        tools:context=".ui.generator.GeneratorFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvLatest"

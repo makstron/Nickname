@@ -2,9 +2,11 @@ package com.klim.architecture.domain.useCases
 
 import com.klim.architecture.domain.models.UserName
 import com.klim.architecture.domain.repositories.UserNameRepositoryI
+import javax.inject.Inject
 import kotlin.random.Random
 
-class UsernameUseCase(private val repositoryI: UserNameRepositoryI) {
+class UsernameUseCase
+constructor(private val repositoryI: UserNameRepositoryI) {
 
     /**
      * Generate new random name
@@ -35,7 +37,7 @@ class UsernameUseCase(private val repositoryI: UserNameRepositoryI) {
         repositoryI.save(userName)
     }
 
-    fun getAllSaved() : ArrayList<UserName> {
+    fun getAllSaved(): ArrayList<UserName> {
         return repositoryI.getAll()
     }
 

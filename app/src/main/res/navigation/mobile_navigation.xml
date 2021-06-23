@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.klim.architecture.ui.generator.HomeFragment"
+        android:name="com.klim.architecture.ui.generator.GeneratorFragment"
         android:label="@string/title_generate"
         tools:layout="@layout/fragment_generator" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.klim.architecture.ui.saved.DashboardFragment"
+        android:name="com.klim.architecture.ui.saved.SavedFragment"
         android:label="@string/title_saved"
         tools:layout="@layout/fragment_saved" />
 
