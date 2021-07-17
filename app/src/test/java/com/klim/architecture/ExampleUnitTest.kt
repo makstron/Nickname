@@ -1,4 +1,4 @@
-package com.klim.architecture
+package com.klim.nickname
 
 import org.junit.Test
 

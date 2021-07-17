@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Architecture</string>
+    <string name="app_name">Nickname</string>
     <string name="title_generate">Generate</string>
     <string name="title_saved">Saved</string>
     <string name="title_settings">Settings</string>

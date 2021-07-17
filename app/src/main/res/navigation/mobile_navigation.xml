@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.klim.architecture.ui.generator.GeneratorFragment"
+        android:name="com.klim.nickname.ui.generator.GeneratorFragment"
         android:label="@string/title_generate"
         tools:layout="@layout/fragment_generator" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.klim.architecture.ui.saved.SavedFragment"
+        android:name="com.klim.nickname.ui.saved.SavedFragment"
         android:label="@string/title_saved"
         tools:layout="@layout/fragment_saved" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.klim.architecture.ui.settings.SettingsFragment"
+        android:name="com.klim.nickname.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>
