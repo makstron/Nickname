@@ -7,10 +7,6 @@ public class UserNameDTO {
     String name;
     long time;
 
-    public UserNameDTO(String name) {
-        this.name = name;
-    }
-
     public UserNameDTO(UID id, String name, long time) {
         this.id = id;
         this.name = name;

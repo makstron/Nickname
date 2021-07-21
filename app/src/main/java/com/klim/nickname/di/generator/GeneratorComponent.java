@@ -1,8 +1,7 @@
 package com.klim.nickname.di.generator;
 
-import com.klim.nickname.ui.generator.GeneratorFragment;
+import com.klim.nickname.app.window.generator.GeneratorFragment;
 
-import dagger.Component;
 import dagger.Subcomponent;
 
 @GeneratorScope

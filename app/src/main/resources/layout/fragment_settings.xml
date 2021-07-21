@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="48dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tveLabelMinLength"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/setting_label_length"
+                    android:textSize="@dimen/font_size" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tveLabelMinLengthValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="1"
+                    android:layout_weight="0"
+                    android:text="10"
+                    android:textSize="@dimen/font_size" />
+
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/rsbMinMax"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:stepSize="1"
+                    android:valueFrom="1"
+                    android:valueTo="20"
+                    app:values="@array/initial_range_slider_values" />
+
+                <TextView
+                    android:id="@+id/tveLabelMaxLengthValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:ems="1"
+                    android:text="20"
+                    android:textSize="@dimen/font_size" />
+
+            </LinearLayout>
+
+
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:gravity="center_vertical"-->
+            <!--                android:orientation="horizontal">-->
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/tveLabelMaxAlphabet"-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginEnd="4dp"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:text="@string/setting_label_alphabet"-->
+            <!--                    android:textSize="@dimen/font_size" />-->
+
+            <!--                <Spinner-->
+            <!--                    android:id="@+id/sSelectLanguage"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginStart="6dp"-->
+            <!--                    android:layout_weight="0"-->
+            <!--                    tools:listitem="@layout/simple_spinner_item" />-->
+
+            <!--            </LinearLayout>-->
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>

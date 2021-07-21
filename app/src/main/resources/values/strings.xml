@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Nickname</string>
+    <string name="title_generate">Generate</string>
+    <string name="title_saved">Saved</string>
+
+    <!-- Settings fragment -->
+    <string name="title_settings">Settings</string>
+    <string name="setting_label_length">Minimal/maximal length</string>
+    <!-- // Settings fragment -->
+</resources>

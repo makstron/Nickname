@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_generator"
+        android:icon="@drawable/ic_random"
+        android:orderInCategory="0"
+        android:title="@string/title_generate" />
+
+    <item
+        android:id="@+id/navigation_store"
+        android:icon="@drawable/ic_baseline_star_border"
+        android:orderInCategory="0"
+        android:title="@string/title_saved" />
+
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings"
+        android:orderInCategory="0"
+        android:title="@string/title_settings" />
+
+</menu>
