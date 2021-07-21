@@ -4,8 +4,10 @@ import android.app.Activity
 import android.graphics.drawable.Animatable2
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +17,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import androidx.recyclerview.widget.SnapHelper
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 import com.klim.nickname.App
 import com.klim.nickname.R
 import com.klim.nickname.databinding.FragmentGeneratorBinding
@@ -47,10 +51,12 @@ class GeneratorFragment : Fragment() {
             binding.rvLatest.scrollToPosition(0)
         })
 
-        val lm = LinearLayoutManager(activity)
-        lm.reverseLayout = true
+        val lm = LinearLayoutManager(activity, RecyclerView.VERTICAL, true)
         binding.rvLatest.layoutManager = lm
         binding.rvLatest.adapter = Adapter()
+
+        val helper: SnapHelper = GravitySnapHelper(Gravity.TOP)
+        helper.attachToRecyclerView(binding.rvLatest)
 
         viewModel.loadSettings()
         viewModel.generateNewUserName()

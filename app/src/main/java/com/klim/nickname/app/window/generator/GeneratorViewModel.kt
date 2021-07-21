@@ -42,13 +42,13 @@ constructor(private val nicknameUseCase: UsernameUseCase, private val settingUse
                 maxLength = settingUseCase.getMaxLength()
             }
             nickname = nicknameUseCase.getNewUserName(minLength, maxLength, false)
+
             withContext(Dispatchers.Main) {
                 val userName = UserNameEntityView(nickname.name)
-                username.get()?.let {
-                    names.value?.add(0, it)
-                    _names.postValue(names.value)
-                }
                 username.set(userName)
+
+                names.value?.add(0, userName)
+                _names.postValue(names.value)
             }
         }
     }
