@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">Nickname</string>
+
+    <!-- Generate fragment -->
     <string name="title_generate">Generate</string>
+    <string name="nickname_was_copied">Nickname \"%s\" was copied</string>
+    <!-- // Generate fragment -->
+
+    <!-- Saved fragment -->
     <string name="title_saved">Saved</string>
+    <!-- // Saved fragment -->
 
     <!-- Settings fragment -->
     <string name="title_settings">Settings</string>

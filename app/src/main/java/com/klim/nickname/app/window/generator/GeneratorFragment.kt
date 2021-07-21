@@ -1,23 +1,27 @@
 package com.klim.nickname.app.window.generator
 
+import android.R.attr.label
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.drawable.Animatable2
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
@@ -29,13 +33,17 @@ import com.klim.nickname.databinding.ItemLatestUsernameBinding
 import com.klim.nickname.di.generator.GeneratorModule
 import javax.inject.Inject
 
+
 class GeneratorFragment : Fragment() {
 
     private lateinit var binding: FragmentGeneratorBinding
     private lateinit var viewModel: GeneratorViewModel
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var nicknamesAdapter: GeneratorNicknamesAdapter
+
+    private var enableGenerate = true //prevent click until animation end
 
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
@@ -52,9 +60,11 @@ class GeneratorFragment : Fragment() {
             binding.rvLatest.scrollToPosition(0)
         })
 
+        nicknamesAdapter = GeneratorNicknamesAdapter()
+        nicknamesAdapter.itemClick = itemClickListener
         val lm = LinearLayoutManager(activity, RecyclerView.VERTICAL, true)
         binding.rvLatest.layoutManager = lm
-        binding.rvLatest.adapter = Adapter()
+        binding.rvLatest.adapter = nicknamesAdapter
 
         val helper: SnapHelper = GravitySnapHelper(Gravity.TOP)
         helper.attachToRecyclerView(binding.rvLatest)
@@ -72,6 +82,13 @@ class GeneratorFragment : Fragment() {
         if (!hidden) {
             viewModel.loadSettings()
         }
+    }
+
+    private val itemClickListener: (String) -> Unit = { nickname ->
+        val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+        val clip = ClipData.newPlainText("nickname", nickname)
+        clipboard!!.setPrimaryClip(clip)
+        Toast.makeText(requireActivity(), getString(R.string.nickname_was_copied, nickname) , Toast.LENGTH_SHORT).show()
     }
 
     private lateinit var avd: AnimatedVectorDrawable
@@ -116,12 +133,18 @@ class GeneratorFragment : Fragment() {
         }
     }
 
-    private var enableGenerate = true
+    inner class GeneratorNicknamesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class Adapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        var itemClick: ((String) -> Unit)? = null
+
+        private val itemSelected = View.OnClickListener {view ->
+            itemClick?.invoke(view.tag as String)
+        }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return UserNameViewHolder(ItemLatestUsernameBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            val vh = UserNameViewHolder(ItemLatestUsernameBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            vh.itemView.setOnClickListener(itemSelected)
+            return vh
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -129,6 +152,7 @@ class GeneratorFragment : Fragment() {
             val userName: UserNameEntityView? = viewModel.names.value?.get(position)
 
             userName?.let { nickname ->
+                viewHolder.itemView.tag = nickname.name
                 viewHolder.binding.tvUserName.text = nickname.name
                 if (nickname.isSaved) {
                     viewHolder.binding.ivStarLeft.visibility = View.VISIBLE
@@ -143,7 +167,9 @@ class GeneratorFragment : Fragment() {
         override fun getItemCount(): Int {
             return viewModel.names.value?.size ?: 0
         }
-    }
 
-    class UserNameViewHolder(var binding: ItemLatestUsernameBinding) : RecyclerView.ViewHolder(binding.root)
+
+    }
 }
+
+class UserNameViewHolder(var binding: ItemLatestUsernameBinding) : RecyclerView.ViewHolder(binding.root)

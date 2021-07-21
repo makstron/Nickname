@@ -1,15 +1,17 @@
 package com.klim.nickname.app.window.saved
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +22,6 @@ import com.klim.nickname.databinding.FragmentStoreBinding
 import com.klim.nickname.databinding.ItemSavedUsernameBinding
 import com.klim.nickname.di.saved.SavedModule
 import com.klim.nickname.di.saved.SavedScope
-import com.klim.nickname.domain.useCases.UsernameUseCase
 import javax.inject.Inject
 
 class StoreFragment
@@ -31,6 +32,8 @@ constructor() : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: StoreViewModel
+
+    private lateinit var nicknamesAdapter: StoreNicknamesAdapter
 
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
@@ -44,12 +47,13 @@ constructor() : Fragment() {
 
 
         var lm = LinearLayoutManager(activity)
-//        lm.setReverseLayout(true)
+        nicknamesAdapter = StoreNicknamesAdapter()
+        nicknamesAdapter.itemClick = itemClickListener
         binding.rvList.layoutManager = lm
-        binding.rvList.adapter = Adapter()
+        binding.rvList.adapter = nicknamesAdapter
 
         viewModel.names.observe(viewLifecycleOwner, Observer {
-            (binding.rvList.adapter as Adapter).notifyDataSetChanged()
+            (binding.rvList.adapter as StoreNicknamesAdapter).notifyDataSetChanged()
             binding.tvPlaceholder.visibility = if (viewModel.names.value?.size ?: 0 > 0) View.GONE else View.VISIBLE
         })
 
@@ -65,18 +69,36 @@ constructor() : Fragment() {
         }
     }
 
-    inner class Adapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val itemClickListener: (String) -> Unit = { nickname ->
+        val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+        val clip = ClipData.newPlainText("nickname", nickname)
+        clipboard!!.setPrimaryClip(clip)
+        Toast.makeText(requireActivity(), getString(R.string.nickname_was_copied, nickname) , Toast.LENGTH_SHORT).show()
+    }
+
+    inner class StoreNicknamesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+        var itemClick: ((String) -> Unit)? = null
+
+        private val itemSelected = View.OnClickListener {view ->
+            itemClick?.invoke(view.tag as String)
+        }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return UserNameViewHolder(ItemSavedUsernameBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            val vh = UserNameViewHolder(ItemSavedUsernameBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            vh.itemView.setOnClickListener(itemSelected)
+            return vh
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val viewHolder = holder as UserNameViewHolder
             val userName = viewModel.names.value?.get(position)
 
-            viewHolder.binding.tvUserName.text = userName?.name
-            viewHolder.binding.tvTime.text = "${userName?.dateTime}"
+            userName?.let {nickname ->
+                viewHolder.itemView.tag = nickname.name
+                viewHolder.binding.tvUserName.text = nickname.name
+                viewHolder.binding.tvTime.text = nickname.dateTime
+            }
         }
 
         override fun getItemCount(): Int {
@@ -84,7 +106,6 @@ constructor() : Fragment() {
         }
 
     }
-
-    class UserNameViewHolder(val binding: ItemSavedUsernameBinding) : RecyclerView.ViewHolder(binding.root)
-
 }
+
+class UserNameViewHolder(val binding: ItemSavedUsernameBinding) : RecyclerView.ViewHolder(binding.root)
