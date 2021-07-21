@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "606635382901",
+    "project_id": "nickname",
+    "storage_bucket": "nickname.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:606635382901:android:43f5179a34ff93f020003c",
+        "android_client_info": {
+          "package_name": "com.klim.nickname"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "606635382901-950t8por37qmsa0g4lsv8p1tmhgnbtmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3ZbzOsqDPt6DPbyu6trklOm9YbJQVEu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "606635382901-950t8por37qmsa0g4lsv8p1tmhgnbtmc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

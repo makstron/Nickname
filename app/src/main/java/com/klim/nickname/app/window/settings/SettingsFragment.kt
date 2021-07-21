@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.slider.RangeSlider
-import com.innovattic.rangeseekbar.RangeSeekBar
 import com.klim.nickname.App
 import com.klim.nickname.databinding.FragmentSettingsBinding
 import com.klim.nickname.di.settings.SettingsModule
