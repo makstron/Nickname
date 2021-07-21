@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.SnapHelper
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 import com.klim.nickname.App
 import com.klim.nickname.R
+import com.klim.nickname.app.window.generator.entity_view.UserNameEntityView
 import com.klim.nickname.databinding.FragmentGeneratorBinding
 import com.klim.nickname.databinding.ItemLatestUsernameBinding
 import com.klim.nickname.di.generator.GeneratorModule
@@ -82,6 +83,8 @@ class GeneratorFragment : Fragment() {
             avd.start()
 
             viewModel.save()
+            binding.rvLatest.adapter?.notifyItemChanged(0)
+            binding.rvLatest.scrollToPosition(0)
         }
 
         avd = binding.acivRefresh.drawable as AnimatedVectorDrawable
@@ -123,9 +126,18 @@ class GeneratorFragment : Fragment() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val viewHolder = holder as UserNameViewHolder
-            val userName = viewModel.names.value?.get(position)
+            val userName: UserNameEntityView? = viewModel.names.value?.get(position)
 
-            viewHolder.binding.tvUserName.text = userName?.name
+            userName?.let { nickname ->
+                viewHolder.binding.tvUserName.text = nickname.name
+                if (nickname.isSaved) {
+                    viewHolder.binding.ivStarLeft.visibility = View.VISIBLE
+                    viewHolder.binding.ivStarRight.visibility = View.VISIBLE
+                } else {
+                    viewHolder.binding.ivStarLeft.visibility = View.GONE
+                    viewHolder.binding.ivStarRight.visibility = View.GONE
+                }
+            }
         }
 
         override fun getItemCount(): Int {

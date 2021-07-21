@@ -54,6 +54,7 @@ constructor(private val nicknameUseCase: UsernameUseCase, private val settingUse
     }
 
     fun save() {
+        username.get()?.isSaved = true
         viewModelScope.launch(Dispatchers.IO) {
             username.get()?.let { nicknameUseCase.save(nickname) }
         }
