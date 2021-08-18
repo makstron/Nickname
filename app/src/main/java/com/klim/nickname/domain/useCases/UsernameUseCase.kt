@@ -6,19 +6,22 @@ import com.klim.nickname.domain.repositories.nickname.UserNameRepositoryI
 import com.klim.nickname.utils.UID
 
 class UsernameUseCase
-constructor(private val repositoryI: UserNameRepositoryI) {
+constructor(
+    private val repository: UserNameRepositoryI,
+    private val nicknameGenerator: NicknameGenerator
+) {
 
     fun getNewUserName(minLength: Int, maxLength: Int, fixedLength: Boolean = false): NicknameEntity {
-        val name = NicknameGenerator.createName(minLength, maxLength, fixedLength)
+        val name = nicknameGenerator.createName(minLength, maxLength, fixedLength)
         return NicknameEntity(UID.timeRandomUID(), name, System.currentTimeMillis())
     }
 
     fun save(nicknameEntity: NicknameEntity) {
-        repositoryI.save(nicknameEntity)
+        repository.save(nicknameEntity)
     }
 
-    fun getAllSaved(): ArrayList<NicknameEntity> {
-        return repositoryI.getAll()
+    fun getAllSaved(): List<NicknameEntity> {
+        return repository.getAll()
     }
 
 }

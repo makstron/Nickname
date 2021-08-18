@@ -5,5 +5,5 @@ import com.klim.nickname.data.dto.UserNameDTO
 interface UserNameDataSourceI {
     fun save(userName: UserNameDTO)
 
-    fun getAll():ArrayList<UserNameDTO>
+    fun getAll():List<UserNameDTO>
 }

@@ -4,6 +4,7 @@ import com.klim.nickname.data.db.dao.NicknameDAO;
 import com.klim.nickname.data.db.migrations.Migrations;
 import com.klim.nickname.data.repositories.userName.UserNameRepository;
 import com.klim.nickname.data.repositories.userName.dataSources.local.LocalDataSource;
+import com.klim.nickname.domain.NicknameGenerator;
 import com.klim.nickname.domain.repositories.nickname.UserNameRepositoryI;
 import com.klim.nickname.domain.useCases.UsernameUseCase;
 
@@ -17,8 +18,8 @@ public class NicknameModule {
 
     @Provides
     @Singleton
-    public UsernameUseCase provideUsernameUseCase(UserNameRepositoryI repository) {
-        return new UsernameUseCase(repository);
+    public UsernameUseCase provideUsernameUseCase(UserNameRepositoryI repository, NicknameGenerator nicknameGenerator) {
+        return new UsernameUseCase(repository, nicknameGenerator);
     }
 
     @Provides

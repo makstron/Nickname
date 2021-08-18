@@ -13,7 +13,7 @@ constructor(private val nicknameDAO: NicknameDAO) : UserNameDataSourceI {
         nicknameDAO.insert(userName.map())
     }
 
-    override fun getAll(): ArrayList<UserNameDTO> {
+    override fun getAll(): List<UserNameDTO> {
         val entities = ArrayList<UserNameDTO>()
         entities.addAll(nicknameDAO.getAll().map { it.map() })
         return entities
