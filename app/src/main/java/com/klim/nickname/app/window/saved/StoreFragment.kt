@@ -98,6 +98,7 @@ constructor() : Fragment() {
                 viewHolder.itemView.tag = nickname.name
                 viewHolder.binding.tvUserName.text = nickname.name
                 viewHolder.binding.tvTime.text = nickname.dateTime
+                viewHolder.binding.executePendingBindings()
             }
         }
 

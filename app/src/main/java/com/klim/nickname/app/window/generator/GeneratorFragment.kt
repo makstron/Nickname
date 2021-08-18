@@ -161,6 +161,7 @@ class GeneratorFragment : Fragment() {
                     viewHolder.binding.ivStarLeft.visibility = View.GONE
                     viewHolder.binding.ivStarRight.visibility = View.GONE
                 }
+                viewHolder.binding.executePendingBindings()
             }
         }
 
