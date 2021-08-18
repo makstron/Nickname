@@ -4,7 +4,7 @@
 # git commit -m "fixing .gitignore"
 
 #special
-/MATERIALS_DbDesigner
+/MATERIALS
 
 #old ignore
 *.iml
