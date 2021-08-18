@@ -72,7 +72,7 @@
             app:layout_constraintTop_toBottomOf="@+id/rvLatest" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/acivStar"
+            android:id="@+id/starIcon"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="20dp"

@@ -11,9 +11,9 @@ import com.klim.nickname.data.db.tables.Setting
 interface SettingsDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun set(setting: Setting)
+    suspend fun set(setting: Setting)
 
     @Query("SELECT * FROM settings WHERE `key` = :key LIMIT 1")
-    fun get(key: String): Setting
+    suspend fun get(key: String): Setting
 
 }

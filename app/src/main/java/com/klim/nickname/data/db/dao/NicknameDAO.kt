@@ -10,12 +10,9 @@ import com.klim.nickname.data.db.tables.Nickname
 interface NicknameDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(nickname: Nickname)
-
-//    @Query("INSERT INTO nicknames (nickname, create_date) VALUES (:nickname., nickname) ")
-//    fun add(nickname: Nickname)
+    suspend fun insert(nickname: Nickname)
 
     @Query("SELECT * FROM nicknames ORDER BY create_date DESC")
-    fun getAll(): List<Nickname>
+    suspend fun getAll(): List<Nickname>
 
 }

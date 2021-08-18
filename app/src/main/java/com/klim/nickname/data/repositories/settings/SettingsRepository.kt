@@ -6,15 +6,15 @@ import com.klim.nickname.domain.settings.enums.SettingKeys
 
 class SettingsRepository(private val dataSource: SettingDataSourceI) : SettingsRepositoryI {
 
-    override fun getMinLength(): Int = dataSource.getSetting(SettingKeys.MIN_LENGTH).value.toInt()
+    override suspend fun getMinLength(): Int = dataSource.getSetting(SettingKeys.MIN_LENGTH).value.toInt()
 
-    override fun setMinLength(length: Int) {
+    override suspend  fun setMinLength(length: Int) {
         dataSource.setSetting(Setting(SettingKeys.MIN_LENGTH.key, length.toString()))
     }
 
-    override fun getMaxLength(): Int = dataSource.getSetting(SettingKeys.MAX_LENGTH).value.toInt()
+    override suspend fun getMaxLength(): Int = dataSource.getSetting(SettingKeys.MAX_LENGTH).value.toInt()
 
-    override fun setMaxLength(length: Int) {
+    override suspend  fun setMaxLength(length: Int) {
         dataSource.setSetting(Setting(SettingKeys.MAX_LENGTH.key, length.toString()))
     }
 

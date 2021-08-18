@@ -45,16 +45,14 @@ class SettingsFragment : Fragment() {
             binding.rsbMinMax.setValues(minMaxLength.first.toFloat(), minMaxLength.second.toFloat())
         })
 
-        binding.rsbMinMax.addOnChangeListener(object : RangeSlider.OnChangeListener {
-
-            override fun onValueChange(slider: RangeSlider, value: Float, fromUser: Boolean) {
+        binding.rsbMinMax.addOnChangeListener(
+            RangeSlider.OnChangeListener { slider, value, fromUser ->
                 if (fromUser) {
                     val values = slider.values
                     binding.tveLabelMinLengthValue.text = "${values[0].toInt()}"
                     binding.tveLabelMaxLengthValue.text = "${values[1].toInt()}"
                 }
-            }
-        })
+            })
 
         binding.rsbMinMax.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: RangeSlider) {}

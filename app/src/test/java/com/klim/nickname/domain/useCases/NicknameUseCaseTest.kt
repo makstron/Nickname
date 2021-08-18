@@ -1,9 +1,10 @@
 package com.klim.nickname.domain.useCases
 
 import com.klim.nickname.domain.NicknameGenerator
-import com.klim.nickname.domain.repositories.nickname.UserNameRepositoryI
+import com.klim.nickname.domain.repositories.nickname.NicknameRepositoryI
 import com.klim.nickname.domain.repositories.nickname.models.NicknameEntity
 import com.klim.nickname.utils.UID
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.AfterEach
@@ -14,17 +15,17 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
 
-internal class UsernameUseCaseTest {
+internal class NicknameUseCaseTest {
 
-    lateinit var useCase: UsernameUseCase
-    lateinit var repository: UserNameRepositoryI
+    lateinit var useCase: NicknameUseCase
+    lateinit var repository: NicknameRepositoryI
     lateinit var nicknameGenerator: NicknameGenerator
 
     @BeforeEach
     fun setUp() {
-        repository = Mockito.mock(UserNameRepositoryI::class.java)
+        repository = Mockito.mock(NicknameRepositoryI::class.java)
         nicknameGenerator = Mockito.mock(NicknameGenerator::class.java)
-        useCase = UsernameUseCase(repository, nicknameGenerator)
+        useCase = NicknameUseCase(repository, nicknameGenerator)
     }
 
     private fun generateSavedList(): List<NicknameEntity> {
@@ -54,19 +55,23 @@ internal class UsernameUseCaseTest {
 
     @Test
     fun `saving nickname`() {
-        val nickname = createRandomNickname()
-        useCase.save(nickname)
+        runBlocking {
+            val nickname = createRandomNickname()
+            useCase.save(nickname)
 
-        verify(repository).save(nickname)
+            verify(repository).save(nickname)
+        }
     }
 
     @DisplayName("\uD83D\uDC4D  get all saved")
     @Test
     fun `get all saved`() {
-        val listSavedNicknames: List<NicknameEntity> = generateSavedList()
-        Mockito.`when`(repository.getAll()).thenReturn(listSavedNicknames)
+        runBlocking {
+            val listSavedNicknames: List<NicknameEntity> = generateSavedList()
+            Mockito.`when`(repository.getAll()).thenReturn(listSavedNicknames)
 
-        val savedNicknames = useCase.getAllSaved()
-        assertIterableEquals(savedNicknames, listSavedNicknames)
+            val savedNicknames = useCase.getAllSaved()
+            assertIterableEquals(savedNicknames, listSavedNicknames)
+        }
     }
 }

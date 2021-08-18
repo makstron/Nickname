@@ -12,41 +12,32 @@ import javax.inject.Inject
 
 class SettingsViewModel
 @Inject
-    constructor(private val useCase: SettingsUseCase) : ViewModel() {
+constructor(private val useCase: SettingsUseCase) : ViewModel() {
 
-    val _minLength = MutableLiveData<Int>()
-    val minLength: LiveData<Int> = _minLength
-
-    val _maxLength = MutableLiveData<Int>()
-    val maxLength: LiveData<Int> = _maxLength
-
-    val _minMaxLength = MutableLiveData<Pair<Int, Int>>()
+    private val _minMaxLength = MutableLiveData<Pair<Int, Int>>()
     val minMaxLength: LiveData<Pair<Int, Int>> = _minMaxLength
 
     fun setMinLength(minLength: Int) {
-        viewModelScope.launch(Dispatchers.Main) {
-            withContext(Dispatchers.IO) {
-                useCase.setMinLength(minLength)
-            }
+        viewModelScope.launch {
+            useCase.setMinLength(minLength)
         }
     }
+
     fun setMaxLength(maxLength: Int) {
-        viewModelScope.launch(Dispatchers.Main) {
-            withContext(Dispatchers.IO) {
-                useCase.setMaxLength(maxLength)
-            }
+        viewModelScope.launch {
+            useCase.setMaxLength(maxLength)
         }
     }
 
     fun loadSettings() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             //show progress
-            withContext(Dispatchers.IO) {
-                _minLength.postValue(useCase.getMinLength())
-                _maxLength.postValue(useCase.getMaxLength())
-
-                _minMaxLength.postValue(Pair(useCase.getMinLength(), useCase.getMaxLength()))
-            }
+            _minMaxLength.postValue(
+                Pair(
+                    useCase.getMinLength(),
+                    useCase.getMaxLength()
+                )
+            )
             //hide progress
         }
     }

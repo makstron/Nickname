@@ -9,11 +9,11 @@ class LocalDataSource
 @Inject
 constructor(private val nicknameDAO: NicknameDAO) : UserNameDataSourceI {
 
-    override fun save(userName: UserNameDTO) {
+    override suspend fun save(userName: UserNameDTO) {
         nicknameDAO.insert(userName.map())
     }
 
-    override fun getAll(): List<UserNameDTO> {
+    override suspend fun getAll(): List<UserNameDTO> {
         val entities = ArrayList<UserNameDTO>()
         entities.addAll(nicknameDAO.getAll().map { it.map() })
         return entities

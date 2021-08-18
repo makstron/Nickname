@@ -2,8 +2,8 @@ package com.klim.nickname.domain.repositories.nickname
 
 import com.klim.nickname.domain.repositories.nickname.models.NicknameEntity
 
-interface UserNameRepositoryI {
-    fun save(nicknameEntity: NicknameEntity)
+interface NicknameRepositoryI {
+    suspend fun save(nicknameEntity: NicknameEntity)
 
-    fun getAll():List<NicknameEntity>
+    suspend fun getAll():List<NicknameEntity>
 }

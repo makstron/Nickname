@@ -2,15 +2,15 @@ package com.klim.nickname.data.repositories.userName
 
 import com.klim.nickname.data.repositories.userName.mappers.map
 import com.klim.nickname.domain.repositories.nickname.models.NicknameEntity
-import com.klim.nickname.domain.repositories.nickname.UserNameRepositoryI
+import com.klim.nickname.domain.repositories.nickname.NicknameRepositoryI
 
-class UserNameRepository(private val localStore: UserNameDataSourceI) : UserNameRepositoryI {
+class NicknameRepository(private val localStore: UserNameDataSourceI) : NicknameRepositoryI {
 
-    override fun save(nicknameEntity: NicknameEntity) {
+    override suspend fun save(nicknameEntity: NicknameEntity) {
         localStore.save(nicknameEntity.map())
     }
 
-    override fun getAll(): ArrayList<NicknameEntity> {
+    override suspend fun getAll(): ArrayList<NicknameEntity> {
         val userNames = ArrayList<NicknameEntity>()
         localStore.getAll().forEach {
             userNames.add(it.map())

@@ -6,7 +6,7 @@ import com.klim.nickname.data.repositories.settings.SettingDataSourceI
 import com.klim.nickname.domain.settings.enums.SettingKeys
 
 class SettingsLocalDataSources(private val settingsDAO: SettingsDAO): SettingDataSourceI {
-    override fun getSetting(key: SettingKeys): Setting {
+    override suspend fun getSetting(key: SettingKeys): Setting {
         var value = settingsDAO.get(key.key)
         if (value == null) {
             value = Setting(key.key, key.defValue)
@@ -14,7 +14,7 @@ class SettingsLocalDataSources(private val settingsDAO: SettingsDAO): SettingDat
         return value
     }
 
-    override fun setSetting(setting: Setting) {
+    override suspend  fun setSetting(setting: Setting) {
         settingsDAO.set(setting)
     }
 }

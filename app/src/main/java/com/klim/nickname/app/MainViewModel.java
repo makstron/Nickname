@@ -1,4 +1,4 @@
-package com.klim.nickname;
+package com.klim.nickname.app;
 
 import androidx.lifecycle.ViewModel;
 

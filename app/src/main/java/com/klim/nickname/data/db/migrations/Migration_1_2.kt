@@ -1,11 +1,11 @@
 package com.klim.nickname.data.db.migrations
 
-import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import effie.app.com.effie.main.clean.data.local.migration.BaseMigration
 
-class Migration_1_2 : Migration(1, 2) {
+class Migration_1_2 : BaseMigration(1, 2) {
 
-    override fun migrate(database: SupportSQLiteDatabase) {
+    override fun migration(database: SupportSQLiteDatabase) {
         database.execSQL("""
             CREATE TABLE settings (
                 key TEXT PRIMARY KEY NOT NULL,

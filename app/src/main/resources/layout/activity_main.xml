@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.klim.nickname.MainViewModel" />
+            type="com.klim.nickname.app.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

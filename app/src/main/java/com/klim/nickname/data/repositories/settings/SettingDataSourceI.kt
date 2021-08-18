@@ -5,7 +5,7 @@ import com.klim.nickname.domain.settings.enums.SettingKeys
 
 interface SettingDataSourceI {
 
-    fun getSetting(key: SettingKeys): Setting
+    suspend fun getSetting(key: SettingKeys): Setting
 
-    fun setSetting(setting: Setting)
+    suspend fun setSetting(setting: Setting)
 }

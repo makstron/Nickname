@@ -38,10 +38,11 @@ class GeneratorFragment : Fragment() {
 
     private lateinit var binding: FragmentGeneratorBinding
     private lateinit var viewModel: GeneratorViewModel
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var nicknamesAdapter: GeneratorNicknamesAdapter
+    private var nicknamesAdapter = NicknamesAdapter()
 
     private var enableGenerate = true //prevent click until animation end
 
@@ -56,23 +57,17 @@ class GeneratorFragment : Fragment() {
         binding.vm = viewModel
 
         viewModel.names.observe(viewLifecycleOwner, Observer {
+            nicknamesAdapter.nicknames.clear()
+            nicknamesAdapter.nicknames.addAll(it)
+
             binding.rvLatest.adapter?.notifyDataSetChanged()
             binding.rvLatest.scrollToPosition(0)
         })
 
-        nicknamesAdapter = GeneratorNicknamesAdapter()
-        nicknamesAdapter.itemClick = itemClickListener
-        val lm = LinearLayoutManager(activity, RecyclerView.VERTICAL, true)
-        binding.rvLatest.layoutManager = lm
-        binding.rvLatest.adapter = nicknamesAdapter
-
-        val helper: SnapHelper = GravitySnapHelper(Gravity.TOP)
-        helper.attachToRecyclerView(binding.rvLatest)
-
-        viewModel.loadSettings()
-        viewModel.generateNewUserName()
-
+        settingView()
         setAction()
+
+        viewModel.init()
 
         return binding.root
     }
@@ -80,97 +75,65 @@ class GeneratorFragment : Fragment() {
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (!hidden) {
-            viewModel.loadSettings()
+            viewModel.loadSettingsAsync()
         }
     }
 
     private val itemClickListener: (String) -> Unit = { nickname ->
-        val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-        val clip = ClipData.newPlainText("nickname", nickname)
-        clipboard!!.setPrimaryClip(clip)
-        Toast.makeText(requireActivity(), getString(R.string.nickname_was_copied, nickname) , Toast.LENGTH_SHORT).show()
+        viewModel.copyToClipboard(requireContext(), nickname)
+
+        Toast.makeText(requireActivity(), getString(R.string.nickname_was_copied, nickname), Toast.LENGTH_SHORT).show()
     }
 
-    private lateinit var avd: AnimatedVectorDrawable
-
-    private fun setAction() {
-        binding.acivStar.setOnClickListener {
-            val avd = binding.acivStar.drawable as AnimatedVectorDrawable
-            avd.stop()
-            avd.start()
-
-            viewModel.save()
-            binding.rvLatest.adapter?.notifyItemChanged(0)
-            binding.rvLatest.scrollToPosition(0)
-        }
-
-        avd = binding.acivRefresh.drawable as AnimatedVectorDrawable
-
-        binding.acivRefresh.setOnClickListener {
-
-            if (enableGenerate) {
-                avd.start()
-            }
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                viewModel.generateNewUserName()
-            }
-        }
+    private fun settingView() {
+        val lm = LinearLayoutManager(activity, RecyclerView.VERTICAL, true)
+        binding.rvLatest.layoutManager = lm
+        binding.rvLatest.adapter = nicknamesAdapter
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            avd.registerAnimationCallback(object : Animatable2.AnimationCallback() {
-                override fun onAnimationStart(drawable: Drawable?) {
-                    super.onAnimationStart(drawable)
-                    enableGenerate = false
-                }
+            (binding.acivRefresh.drawable as AnimatedVectorDrawable)
+                .registerAnimationCallback(object : Animatable2.AnimationCallback() {
+                    override fun onAnimationStart(drawable: Drawable?) {
+                        super.onAnimationStart(drawable)
+                        enableGenerate = false
+                    }
 
-                override fun onAnimationEnd(drawable: Drawable?) {
-                    super.onAnimationEnd(drawable)
-                    viewModel.generateNewUserName()
-                    enableGenerate = true
-                }
-            })
+                    override fun onAnimationEnd(drawable: Drawable?) {
+                        super.onAnimationEnd(drawable)
+                        viewModel.generateNewUserNameAsync()
+                        enableGenerate = true
+                    }
+                })
         }
     }
 
-    inner class GeneratorNicknamesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private fun setAction() {
+        nicknamesAdapter.itemClick = itemClickListener
 
-        var itemClick: ((String) -> Unit)? = null
-
-        private val itemSelected = View.OnClickListener {view ->
-            itemClick?.invoke(view.tag as String)
+        binding.starIcon.setOnClickListener {
+            setStar()
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            val vh = UserNameViewHolder(ItemLatestUsernameBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            vh.itemView.setOnClickListener(itemSelected)
-            return vh
+        binding.acivRefresh.setOnClickListener {
+            generateNickname()
         }
+    }
 
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val viewHolder = holder as UserNameViewHolder
-            val userName: UserNameEntityView? = viewModel.names.value?.get(position)
+    private fun setStar() {
+        val avd = binding.starIcon.drawable as AnimatedVectorDrawable
+        avd.stop()
+        avd.start()
 
-            userName?.let { nickname ->
-                viewHolder.itemView.tag = nickname.name
-                viewHolder.binding.tvUserName.text = nickname.name
-                if (nickname.isSaved) {
-                    viewHolder.binding.ivStarLeft.visibility = View.VISIBLE
-                    viewHolder.binding.ivStarRight.visibility = View.VISIBLE
-                } else {
-                    viewHolder.binding.ivStarLeft.visibility = View.GONE
-                    viewHolder.binding.ivStarRight.visibility = View.GONE
-                }
-                viewHolder.binding.executePendingBindings()
-            }
+        viewModel.save()
+        binding.rvLatest.adapter?.notifyItemChanged(0)
+        binding.rvLatest.scrollToPosition(0)
+    }
+
+    private fun generateNickname() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            viewModel.generateNewUserNameAsync()
+        } else if (enableGenerate) {
+            (binding.acivRefresh.drawable as AnimatedVectorDrawable).start()
         }
-
-        override fun getItemCount(): Int {
-            return viewModel.names.value?.size ?: 0
-        }
-
-
     }
 }
-
-class UserNameViewHolder(var binding: ItemLatestUsernameBinding) : RecyclerView.ViewHolder(binding.root)
