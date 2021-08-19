@@ -13,6 +13,7 @@ import com.klim.nickname.app.window.generator.GeneratorFragment
 import com.klim.nickname.app.window.saved.StoreFragment
 import com.klim.nickname.app.window.settings.SettingsFragment
 import com.klim.nickname.databinding.ActivityMainBinding
+import java.lang.ref.SoftReference
 import java.lang.ref.WeakReference
 import kotlin.collections.set
 
@@ -20,9 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var vm: MainViewModel
     private lateinit var binding: ActivityMainBinding
-
-    private val fragmentsMap = HashMap<String, WeakReference<Fragment>>()
-    private var currentFragment: WeakReference<Fragment>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +43,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openStartFragment() {
-        //start fragment
-        val startFragment = GeneratorFragment()
-        currentFragment = WeakReference(startFragment)
-        fragmentsMap[startFragment::class.java.simpleName] = WeakReference(startFragment)
-        supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment, startFragment).commit()
+        vm.openStartFragment { fragment ->
+            supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment, fragment).commit()
+        }
     }
 
     private fun setActions() {
@@ -61,11 +57,11 @@ class MainActivity : AppCompatActivity() {
                 else -> GeneratorFragment::class.java.simpleName
             }
 
-            currentFragment?.get()?.let {
+            vm.currentFragment?.get()?.let {
                 supportFragmentManager.beginTransaction().hide(it).commit()
             }
 
-            val fragment = fragmentsMap[key]?.get()?.apply {
+            val fragment = vm.fragmentsMap[key]?.get()?.apply {
                 supportFragmentManager.beginTransaction().show(this).commit()
             } ?: run {
                 when (item.itemId) {
@@ -74,12 +70,12 @@ class MainActivity : AppCompatActivity() {
                     R.id.navigation_settings -> SettingsFragment()
                     else -> GeneratorFragment()
                 }.apply {
-                    fragmentsMap[key] = WeakReference(this)
+                    vm.fragmentsMap[key] = SoftReference(this)
                     supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment, this).commit()
                 }
             }
 
-            currentFragment = WeakReference(fragment)
+            vm.currentFragment = SoftReference(fragment)
 
             true
         }

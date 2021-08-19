@@ -63,7 +63,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/acivRefresh"
             android:layout_width="80dp"
-            android:layout_height="160dp"
+            android:layout_height="140dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/create_anim"
             android:tint="@color/colorPrimary"
@@ -75,7 +75,6 @@
             android:id="@+id/starIcon"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="20dp"
             android:padding="20dp"
             android:src="@drawable/star_anim"
             android:tint="@color/colorPrimary"
